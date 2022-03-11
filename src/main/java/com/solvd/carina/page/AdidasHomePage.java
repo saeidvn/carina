@@ -33,6 +33,9 @@ public class AdidasHomePage extends AbstractPage {
     @FindBy(xpath = "//button[contains(@class,'gl-cta gl-cta--primary') and contains(@data-auto-id,'login-form-login')]")
     private ExtendedWebElement logInButton;
 
+    @FindBy(xpath = "//a[@class='gl-link gl-label--bold  link___1kK4C '][1]")
+    private ExtendedWebElement visitYourAccount;
+
     @FindBy(css = ".searchinput___zXLAR")
     private ExtendedWebElement searchBox;
 
@@ -47,24 +50,29 @@ public class AdidasHomePage extends AbstractPage {
         setPageAbsoluteURL(R.CONFIG.get("url"));
     }
 
-    public void headerHelpButton() {
+    public ResultPage headerHelpButton() {
         this.headerHelpButton.click();
+        return new ResultPage(driver);
     }
 
     public boolean isHeaderHelpButtonPresent() {
         return this.headerHelpButton.isPresent();
     }
 
-    public void footerHelpButton() {
+    /** They are used with 2nd help test(invisible help button on web)
+    public HelpPage footerHelpButton() {
         this.footerHelpButton.click();
+        return new HelpPage(driver);
     }
 
     public boolean isFooterHelpButtonPresent() {
         return this.footerHelpButton.isPresent();
     }
+    */
 
-    public void helpAndCustomerServiceButton() {
+    public ResultPage helpAndCustomerServiceButton() {
         this.helpAndCustomerService.click();
+        return new ResultPage(driver);
     }
 
     public boolean isHelpAndCustomerServicePresent() {
@@ -99,38 +107,47 @@ public class AdidasHomePage extends AbstractPage {
         this.logInButton.clickIfPresent();
     }
 
+    public ResultPage visitYourAccount() {
+        this.visitYourAccount.click();
+        return new ResultPage(driver);
+    }
+
     public SearchBlock clickSearchBox(String productName) {
         this.searchBox.clickIfPresent();
         this.searchBox.type(productName);
         return new SearchBlock(driver);
     }
 
-    public ResultPage clickOnWishListButton() {
-        this.wishListButton.clickIfPresent();
-        return new ResultPage(driver);
-    }
-
-    public boolean isProfileButtonPresent() {
+    public boolean profileButtonIsPresent() {
         return this.profileButton.isPresent();
     }
 
-    public boolean isEmailBoxPresent() {
+    public boolean profileButtonIsClickable() {
+        return this.profileButton.isClickable();
+    }
+
+    public boolean emailBoxIsPresent() {
         return this.emailBox.isPresent();
     }
 
-    public boolean isContinueButtonPresent() {
+    public boolean continueButtonIsPresent() {
         return this.continueButton.isPresent();
     }
 
-    public boolean isPasswordBoxPresent() {
+    public boolean passwordBoxIsPresent() {
         return this.passwordBox.isPresent();
     }
 
-    public boolean isLoginButtonPresent() {
+    public boolean loginButtonIsPresent() {
         return this.logInButton.isPresent();
     }
 
-    public boolean isSearchBoxPresent() {
+    public boolean searchBoxIsPresent() {
         return this.searchBox.isPresent();
+    }
+
+    public ResultPage clickOnWishListButton() {
+        this.wishListButton.clickIfPresent();
+        return new ResultPage(driver);
     }
 }

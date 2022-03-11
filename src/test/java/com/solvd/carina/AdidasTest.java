@@ -5,7 +5,6 @@ import com.qaprosoft.carina.core.foundation.report.testrail.TestRailCases;
 import com.qaprosoft.carina.core.foundation.utils.ownership.MethodOwner;
 import com.solvd.carina.page.AccessoriesPage;
 import com.solvd.carina.page.AdidasHomePage;
-import com.solvd.carina.page.HelpPage;
 import com.solvd.carina.page.ResultPage;
 import com.solvd.carina.page.components.FilterBlock;
 import com.solvd.carina.page.components.SearchBlock;
@@ -21,25 +20,25 @@ public class AdidasTest extends AbstractTest {
     public void verifyHomePageOpeningTest() {
         AdidasHomePage adidasHomePage = new AdidasHomePage(getDriver());
         adidasHomePage.open();
-        Assert.assertTrue(adidasHomePage.isPageOpened(5), "Adidas homepage is not opened.");
+        Assert.assertTrue(adidasHomePage.isPageOpened(5), "Adidas home page is not opened.");
 
-        HelpPage helpPage = new HelpPage(getDriver());
+        ResultPage resultPage = new ResultPage(getDriver());
 
         Assert.assertTrue(adidasHomePage.isHeaderHelpButtonPresent(), "Header Help button is not present.");
         adidasHomePage.headerHelpButton();
-        Assert.assertTrue(helpPage.helpContentTitleIsVisible(), "Help Content is missing.");
+        Assert.assertTrue(resultPage.helpContentTitleIsVisible(), "Help Content is missing.");
 
         /** "This Help button working on web, but it is invisible because it's for mobile version."
          *
         Assert.assertTrue(adidasHomePage.isFooterHelpButtonPresent(), "Footer Help button is not present.");
         adidasHomePage.footerHelpButton();
-        Assert.assertTrue(helpPage.helpContentTitleIsVisible(), "Help Content is missing.");
+        Assert.assertTrue(resultPage.helpContentTitleIsVisible(), "Help Content is missing.");
         */
 
         Assert.assertTrue(adidasHomePage.isHelpAndCustomerServicePresent()
                 , "Help & Customer Service button is not present.");
         adidasHomePage.helpAndCustomerServiceButton();
-        Assert.assertTrue(helpPage.helpContentTitleIsVisible(), "Help Content is missing.");
+        Assert.assertTrue(resultPage.helpContentTitleIsVisible(), "Help Content is missing.");
     }
 
     @TestRailCases(testCasesId = "2")
@@ -48,22 +47,26 @@ public class AdidasTest extends AbstractTest {
     public void checkLoginToAccount() {
         AdidasHomePage adidasHomePage = new AdidasHomePage(getDriver());
         adidasHomePage.open();
-        Assert.assertTrue(adidasHomePage.isPageOpened(5), "Adidas homepage is not opened.");
+        Assert.assertTrue(adidasHomePage.isPageOpened(5), "Adidas home page is not opened.");
 
-        Assert.assertTrue(adidasHomePage.isProfileButtonPresent(), "Profile button is not present.");
+        Assert.assertTrue(adidasHomePage.profileButtonIsPresent(), "Profile button is not present.");
         adidasHomePage.profileButton();
+        Assert.assertTrue(adidasHomePage.profileButtonIsClickable(), "Unable click on profile button.");
 
-        Assert.assertTrue(adidasHomePage.isEmailBoxPresent(), "Email box is not present.");
+        Assert.assertTrue(adidasHomePage.emailBoxIsPresent(), "Email box is not present.");
         adidasHomePage.emailBox("poterin59@816qs.com");
 
-        Assert.assertTrue(adidasHomePage.isContinueButtonPresent(), "Continue button is not present.");
+        Assert.assertTrue(adidasHomePage.continueButtonIsPresent(), "Continue button is not present.");
         adidasHomePage.continueButton();
 
-        Assert.assertTrue(adidasHomePage.isPasswordBoxPresent(), "Password box is not present.");
+        Assert.assertTrue(adidasHomePage.passwordBoxIsPresent(), "Password box is not present.");
         adidasHomePage.passwordBox("12345Test");
 
-        Assert.assertTrue(adidasHomePage.isLoginButtonPresent(), "Login button is not present.");
+        Assert.assertTrue(adidasHomePage.loginButtonIsPresent(), "Login button is not present.");
         adidasHomePage.logInButton();
+
+        ResultPage resultPage = adidasHomePage.visitYourAccount();
+        Assert.assertTrue(resultPage.homeUserStatusIsVisible(), "User status is missing.");
     }
 
     @TestRailCases(testCasesId = "3")
@@ -72,9 +75,9 @@ public class AdidasTest extends AbstractTest {
     public void checkSpecialCharacter() {
         AdidasHomePage adidasHomePage = new AdidasHomePage(getDriver());
         adidasHomePage.open();
-        Assert.assertTrue(adidasHomePage.isPageOpened(), "Adidas homepage is not opened.");
+        Assert.assertTrue(adidasHomePage.isPageOpened(), "Adidas home page is not opened.");
 
-        Assert.assertTrue(adidasHomePage.isSearchBoxPresent(), "Search box is not visible.");
+        Assert.assertTrue(adidasHomePage.searchBoxIsPresent(), "Search box is not visible.");
         SearchBlock searchBlock = adidasHomePage.clickSearchBox("@!?#$%&*\n");
 
         ResultPage resultPage = searchBlock.getProductResult();
@@ -88,12 +91,13 @@ public class AdidasTest extends AbstractTest {
     public void checkWishList() throws InterruptedException {
         AdidasHomePage adidasHomePage = new AdidasHomePage(getDriver());
         adidasHomePage.open();
-        Assert.assertTrue(adidasHomePage.isPageOpened(), "Adidas homepage is not opened.");
+        Assert.assertTrue(adidasHomePage.isPageOpened(), "Adidas home page is not opened.");
 
         ResultPage resultPage = adidasHomePage.clickOnWishListButton();
 
         Assert.assertTrue(resultPage.popupIsVisible(), "Popup button is not visible.");
         resultPage.closePopUp();
+        Assert.assertFalse(resultPage.popupIsVisible(), "Popup button is visible.");
 
         Assert.assertTrue(resultPage.productListIsVisible(), "Result page is not opened.");
 
@@ -115,9 +119,9 @@ public class AdidasTest extends AbstractTest {
     public void checkSearchBox() {
         AdidasHomePage adidasHomePage = new AdidasHomePage(getDriver());
         adidasHomePage.open();
-        Assert.assertTrue(adidasHomePage.isPageOpened(), "Adidas homepage is not opened.");
+        Assert.assertTrue(adidasHomePage.isPageOpened(), "Adidas home page is not opened.");
 
-        Assert.assertTrue(adidasHomePage.isSearchBoxPresent(), "Search box is not present.");
+        Assert.assertTrue(adidasHomePage.searchBoxIsPresent(), "Search box is not present.");
         SearchBlock searchBlock = adidasHomePage.clickSearchBox("cap");
 
         Assert.assertTrue(searchBlock.newFrameIsVisible(), "Result page is not opened.");
@@ -127,16 +131,6 @@ public class AdidasTest extends AbstractTest {
         resultPage.closePopUp();
 
         Assert.assertFalse(resultPage.productListIsVisible(), "Result page is empty.");
-    }
-
-    @TestRailCases(testCasesId = "")
-    @Test(description = "Open the Adidas Accessories Page.")
-    @MethodOwner(owner = "Saeid Vahidnia", platform = "web")
-    public void checkAccessoriesPageOpeningTest() {
-
-        AccessoriesPage accessoriesPage = new AccessoriesPage(getDriver());
-        accessoriesPage.open();
-        Assert.assertTrue(accessoriesPage.isPageOpened(5), "Accessories page is not opened.");
     }
 
     @TestRailCases(testCasesId = "6")
@@ -150,7 +144,7 @@ public class AdidasTest extends AbstractTest {
 
         AccessoriesPage accessoriesPage = new AccessoriesPage(getDriver());
         accessoriesPage.open();
-        Assert.assertTrue(accessoriesPage.isPageOpened(5), "Adidas Homepage is not opened.");
+        Assert.assertTrue(accessoriesPage.isPageOpened(5), "Adidas home page is not opened.");
 
         int from = 0;
         int to = 500;
@@ -177,7 +171,10 @@ public class AdidasTest extends AbstractTest {
         filterBlock.clickLowPriceToHigh();
 
         ResultPage resultPage = filterBlock.clickApplyButton();
+
+        Assert.assertTrue(resultPage.popupIsVisible(), "Popup button is not visible.");
         resultPage.closePopUp();
+        Assert.assertFalse(resultPage.popupIsVisible(), "Popup button is visible.");
 
         int from1 = 0;
         int to1 = 500;
@@ -214,7 +211,7 @@ public class AdidasTest extends AbstractTest {
 
         AccessoriesPage accessoriesPage = new AccessoriesPage(getDriver());
         accessoriesPage.open();
-        Assert.assertTrue(accessoriesPage.isPageOpened(5), "Adidas Homepage is not opened.");
+        Assert.assertTrue(accessoriesPage.isPageOpened(5), "Adidas home page is not opened.");
 
         int from = 0;
         int to = 500;
@@ -240,7 +237,10 @@ public class AdidasTest extends AbstractTest {
         filterBlock.clickHighPriceToLow();
 
         ResultPage resultPage = filterBlock.clickApplyButton();
+
+        Assert.assertTrue(resultPage.popupIsVisible(), "Popup button is not visible.");
         resultPage.closePopUp();
+        Assert.assertFalse(resultPage.popupIsVisible(), "Popup button is visible.");
 
         int from1 = 0;
         int to1 = 500;
@@ -277,7 +277,7 @@ public class AdidasTest extends AbstractTest {
 
         AccessoriesPage accessoriesPage = new AccessoriesPage(getDriver());
         accessoriesPage.open();
-        Assert.assertTrue(accessoriesPage.isPageOpened(5), "Adidas Homepage is not opened.");
+        Assert.assertTrue(accessoriesPage.isPageOpened(5), "Adidas home page is not opened.");
 
         int from = 0;
         int to = 500;
@@ -303,7 +303,10 @@ public class AdidasTest extends AbstractTest {
         filterBlock.clickTopSellersButton();
 
         ResultPage resultPage = filterBlock.clickApplyButton();
+
+        Assert.assertTrue(resultPage.popupIsVisible(), "Popup button is not visible.");
         resultPage.closePopUp();
+        Assert.assertFalse(resultPage.popupIsVisible(), "Popup button is visible.");
 
         int from1 = 0;
         int to1 = 500;
@@ -327,5 +330,15 @@ public class AdidasTest extends AbstractTest {
 
         fourthSort = resultPage.getResultPricesAsNumbers().get(7);
         Assert.assertNotEquals(fourthUnSort, fourthSort, "Products are equals.");
+    }
+
+    @TestRailCases(testCasesId = "9")
+    @Test(description = "Adding product to wishlist from Accessories page.")
+    @MethodOwner(owner = "Saeid Vahidnia", platform = "web")
+    public void checkAddToWishlist() {
+        AccessoriesPage accessoriesPage = new AccessoriesPage(getDriver());
+        accessoriesPage.open();
+
+        accessoriesPage.addProductToWishlist();
     }
 }

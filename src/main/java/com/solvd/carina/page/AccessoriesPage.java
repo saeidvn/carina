@@ -18,18 +18,24 @@ public class AccessoriesPage extends AbstractPage {
     @FindBy(css = ".filter-panel-cta-btn___2zRtl")
     private ExtendedWebElement filterButton;
 
+    @FindBy(xpath = "(//div[@class='plp-product-card__wishlist-button___qAqKB toggle_wishlist_button___my-ER  '])[1]")
+    private ExtendedWebElement addToWishlistButton;
+
+    @FindBy(xpath = "//button[@class='gl-modal__close']")
+    private ExtendedWebElement closePopupButton;
+
     public AccessoriesPage(WebDriver driver) {
         super(driver);
         setPageAbsoluteURL(R.CONFIG.get("AccessoriesPage_url"));
     }
 
     public FilterBlock clickFilterButton() {
-        filterButton.clickIfPresent();
+        this.filterButton.clickIfPresent();
         return new FilterBlock(driver);
     }
 
     public ExtendedWebElement getFilterButton() {
-        return filterButton;
+        return this.filterButton;
     }
 
     public List<String> getProductPricesAsStrings() {
@@ -43,5 +49,14 @@ public class AccessoriesPage extends AbstractPage {
                 .map(price -> price.replaceAll("[^0-9]", ""))
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
+    }
+
+    public ResultPage addProductToWishlist() {
+        this.addToWishlistButton.clickIfPresent();
+        return new ResultPage(driver);
+    }
+
+    public void closePopup() {
+        this.closePopupButton.click();
     }
 }

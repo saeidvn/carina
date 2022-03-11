@@ -10,11 +10,17 @@ import java.util.stream.Collectors;
 
 public class ResultPage extends AbstractPage {
 
+    @FindBy(xpath = "//h2[@class='gl-heading title___2eQQb withhtml___3ITcI gl-heading--m']")
+    private ExtendedWebElement helpContentTitle;
+
     @FindBy(xpath = "//div[@class = 'badge-container___DVUWN']/div/div")
     private List<ExtendedWebElement> productPrices;
 
     @FindBy(xpath = "//button[@class='gl-modal__close']")
     private ExtendedWebElement popupButton;
+
+    @FindBy(xpath = "//div[@class='gl-flex-display col-l-24']")
+    private ExtendedWebElement myAccountStatus;
 
     @FindBy(xpath = "//h4[@class='nohits_title___2jjLy']")
     private ExtendedWebElement searchNoContentTitle;
@@ -43,12 +49,16 @@ public class ResultPage extends AbstractPage {
                 .collect(Collectors.toList());
     }
 
+    public boolean helpContentTitleIsVisible() {
+        return this.helpContentTitle.isVisible();
+    }
+
     public boolean productListIsVisible() {
         return this.productPrices.isEmpty();
     }
 
     public boolean popupIsVisible() {
-        return popupButton.isVisible();
+        return this.popupButton.isVisible();
     }
 
     public boolean searchNoContentTitleIsVisible() {
@@ -57,6 +67,10 @@ public class ResultPage extends AbstractPage {
 
     public boolean searchNoContentDescriptionIsVisible() {
         return this.searchNoContentDescription.isVisible();
+    }
+
+    public boolean homeUserStatusIsVisible() {
+        return this.myAccountStatus.isVisible();
     }
 
 }
