@@ -1,5 +1,5 @@
 /target
 /.idea
 /reports
-/crypto.key
 .DS_Store
+/crypto.key
