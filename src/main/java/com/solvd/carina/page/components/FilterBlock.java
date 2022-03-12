@@ -2,7 +2,7 @@ package com.solvd.carina.page.components;
 
 import com.qaprosoft.carina.core.foundation.webdriver.decorator.ExtendedWebElement;
 import com.qaprosoft.carina.core.gui.AbstractUIObject;
-import com.solvd.carina.page.ResultPage;
+import com.solvd.carina.page.ProductListResultPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -24,37 +24,40 @@ public class FilterBlock extends AbstractUIObject {
         super(driver);
     }
 
-    public void clickLowPriceToHigh() {
+    public void clickOnLowPriceToHighButton() {
         lowPriceToHighButton.clickIfPresent();
     }
 
-    public void clickHighPriceToLow() {
+    public void clickOnHighPriceToLowButton() {
         highPriceToLowButton.clickIfPresent();
     }
 
-    public void clickTopSellersButton() {
+    public void clickOnTopSellersButton() {
         topSellersButton.clickIfPresent();
     }
 
-    public ResultPage clickApplyButton() {
+    public ProductListResultPage clickOnApplyButton() {
         applyButton.clickIfPresent();
-        return new ResultPage(driver);
+        return new ProductListResultPage(driver);
     }
 
-    public ExtendedWebElement getApplyButton() {
-        return applyButton;
-    }
-
-    public boolean isLowPriceToHighButtonIsVisible() {
+    public boolean isLowPriceToHighPriceButtonPresent() {
+        return lowPriceToHighButton.isPresent();
+        /** Need to ask which one is better!!!
         return isAnyElementPresent(lowPriceToHighButton);
+         */
     }
 
-    public boolean isHighPriceToLowButtonIsVisible() {
-        return this.highPriceToLowButton.isVisible();
+    public boolean isHighPriceToLowPriceButtonPresent() {
+        return highPriceToLowButton.isPresent();
     }
 
-    public boolean isTopSellersButtonIsVisible() {
-        return this.topSellersButton.isVisible();
+    public boolean isTopSellersButtonPresent() {
+        return topSellersButton.isPresent();
+    }
+
+    public boolean isApplyButtonPresent() {
+        return applyButton.isPresent();
     }
 
 }

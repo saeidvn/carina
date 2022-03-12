@@ -3,9 +3,7 @@ package com.solvd.carina;
 import com.qaprosoft.carina.core.foundation.AbstractTest;
 import com.qaprosoft.carina.core.foundation.report.testrail.TestRailCases;
 import com.qaprosoft.carina.core.foundation.utils.ownership.MethodOwner;
-import com.solvd.carina.page.AccessoriesPage;
-import com.solvd.carina.page.AdidasHomePage;
-import com.solvd.carina.page.ResultPage;
+import com.solvd.carina.page.*;
 import com.solvd.carina.page.components.FilterBlock;
 import com.solvd.carina.page.components.SearchBlock;
 import org.openqa.selenium.JavascriptExecutor;
@@ -17,28 +15,31 @@ public class AdidasTest extends AbstractTest {
     @TestRailCases(testCasesId = "1")
     @Test(description = "Check 3 help buttons.")
     @MethodOwner(owner = "Saeid Vahidnia", platform = "web")
-    public void verifyHomePageOpeningTest() {
+    public void checkHelpButton() {
         AdidasHomePage adidasHomePage = new AdidasHomePage(getDriver());
         adidasHomePage.open();
         Assert.assertTrue(adidasHomePage.isPageOpened(5), "Adidas home page is not opened.");
 
-        ResultPage resultPage = new ResultPage(getDriver());
-
         Assert.assertTrue(adidasHomePage.isHeaderHelpButtonPresent(), "Header Help button is not present.");
-        adidasHomePage.headerHelpButton();
-        Assert.assertTrue(resultPage.helpContentTitleIsVisible(), "Help Content is missing.");
+        HelpPage helpPage = adidasHomePage.clickOnHeaderHelpButton();
+        Assert.assertTrue(helpPage.isHelpContentTitleVisible(), "Help Content is missing.");
+
+        Assert.assertTrue(helpPage.isAdidasHomePageButtonPresent(), "Adidas home page button is not visible.");
+        helpPage.clickOnAdidasHomePageButton();
+
+        Assert.assertTrue(adidasHomePage.isPopupVisible(), "Popup is not visible.");
+        adidasHomePage.clickOnClosePopUp();
+        Assert.assertFalse(adidasHomePage.isPopupVisible(), "Popup is visible.");
 
         /** "This Help button working on web, but it is invisible because it's for mobile version."
          *
-        Assert.assertTrue(adidasHomePage.isFooterHelpButtonPresent(), "Footer Help button is not present.");
         adidasHomePage.footerHelpButton();
-        Assert.assertTrue(resultPage.helpContentTitleIsVisible(), "Help Content is missing.");
         */
 
         Assert.assertTrue(adidasHomePage.isHelpAndCustomerServicePresent()
                 , "Help & Customer Service button is not present.");
-        adidasHomePage.helpAndCustomerServiceButton();
-        Assert.assertTrue(resultPage.helpContentTitleIsVisible(), "Help Content is missing.");
+        helpPage = adidasHomePage.clickOnHelpAndCustomerServiceButton();
+        Assert.assertTrue(helpPage.isHelpContentTitleVisible(), "Help Content is missing.");
     }
 
     @TestRailCases(testCasesId = "2")
@@ -49,94 +50,87 @@ public class AdidasTest extends AbstractTest {
         adidasHomePage.open();
         Assert.assertTrue(adidasHomePage.isPageOpened(5), "Adidas home page is not opened.");
 
-        Assert.assertTrue(adidasHomePage.profileButtonIsPresent(), "Profile button is not present.");
-        adidasHomePage.profileButton();
-        Assert.assertTrue(adidasHomePage.profileButtonIsClickable(), "Unable click on profile button.");
+        Assert.assertTrue(adidasHomePage.isProfileButtonPresent(), "Profile button is not present.");
+        adidasHomePage.clickOnProfileButton();
 
-        Assert.assertTrue(adidasHomePage.emailBoxIsPresent(), "Email box is not present.");
-        adidasHomePage.emailBox("poterin59@816qs.com");
+        Assert.assertTrue(adidasHomePage.isEmailBoxPresent(), "Email box is not present.");
+        adidasHomePage.TypeEmailInBox("poterin59@816qs.com");
 
-        Assert.assertTrue(adidasHomePage.continueButtonIsPresent(), "Continue button is not present.");
-        adidasHomePage.continueButton();
+        Assert.assertTrue(adidasHomePage.isContinueButtonVisible(), "Continue button is not present.");
+        adidasHomePage.clickOnContinueButton();
 
-        Assert.assertTrue(adidasHomePage.passwordBoxIsPresent(), "Password box is not present.");
-        adidasHomePage.passwordBox("12345Test");
+        Assert.assertTrue(adidasHomePage.isPasswordBoxPresent(), "Password box is not present.");
+        adidasHomePage.typePasswordInBox("12345Test");
 
-        Assert.assertTrue(adidasHomePage.loginButtonIsPresent(), "Login button is not present.");
-        adidasHomePage.logInButton();
+        Assert.assertTrue(adidasHomePage.isLoginButtonVisible(), "Login button is not present.");
+        adidasHomePage.clickOnLoginButton();
 
-        ResultPage resultPage = adidasHomePage.visitYourAccount();
-        Assert.assertTrue(resultPage.homeUserStatusIsVisible(), "User status is missing.");
+        Assert.assertTrue(adidasHomePage.isVisitYourAccountPresent(), "");
+        MyAccountPage myAccountPage = adidasHomePage.clickOnVisitYourAccountButton();
+        Assert.assertTrue(myAccountPage.isHomeUserStatusVisible(), "User status is missing.");
     }
 
     @TestRailCases(testCasesId = "3")
-    @Test(description = "Open the Adidas Home page and use special character in search box.")
+    @Test(description = "Open the Adidas Home page and search special character in search box.")
     @MethodOwner(owner = "Saeid Vahidnia", platform = "web")
-    public void checkSpecialCharacter() {
+    public void checkSearchSpecialCharacter() {
         AdidasHomePage adidasHomePage = new AdidasHomePage(getDriver());
         adidasHomePage.open();
         Assert.assertTrue(adidasHomePage.isPageOpened(), "Adidas home page is not opened.");
 
-        Assert.assertTrue(adidasHomePage.searchBoxIsPresent(), "Search box is not visible.");
-        SearchBlock searchBlock = adidasHomePage.clickSearchBox("@!?#$%&*\n");
+        Assert.assertTrue(adidasHomePage.isSearchBoxPresent(), "Search box is not visible.");
+        SearchBlock searchBlock = adidasHomePage.typeInSearchBox("@!?#$%&*\n");
 
-        ResultPage resultPage = searchBlock.getProductResult();
-        Assert.assertTrue(resultPage.searchNoContentTitleIsVisible(), "Search Title is missing.");
-        Assert.assertTrue(resultPage.searchNoContentDescriptionIsVisible(), "Search description is missing.");
+        SearchResultPage resultPage = searchBlock.noResultForSearch();
+        Assert.assertTrue(resultPage.isSearchNoContentTitleVisible(), "Search Title is missing.");
+        Assert.assertTrue(resultPage.isSearchNoContentDescriptionVisible(), "Search description is missing.");
     }
 
     @TestRailCases(testCasesId = "4")
-    @Test(description = "Open the wishlist page.")
+    @Test(description = "Open Adidas home page and click on wishlist button to open the wishlist page.")
     @MethodOwner(owner = "Saeid Vahidnia", platform = "web")
-    public void checkWishList() throws InterruptedException {
+    public void checkWishListButton() {
         AdidasHomePage adidasHomePage = new AdidasHomePage(getDriver());
         adidasHomePage.open();
         Assert.assertTrue(adidasHomePage.isPageOpened(), "Adidas home page is not opened.");
 
-        ResultPage resultPage = adidasHomePage.clickOnWishListButton();
+        WishlistPage wishlistPage = adidasHomePage.clickOnWishListButton();
 
-        Assert.assertTrue(resultPage.popupIsVisible(), "Popup button is not visible.");
-        resultPage.closePopUp();
-        Assert.assertFalse(resultPage.popupIsVisible(), "Popup button is visible.");
+        Assert.assertTrue(wishlistPage.isPopupVisible(), "Popup button is not visible.");
+        wishlistPage.clickOnClosePopUp();
+        Assert.assertFalse(wishlistPage.isPopupVisible(), "Popup button is visible.");
 
-        Assert.assertTrue(resultPage.productListIsVisible(), "Result page is not opened.");
-
-        int from = 0;
-        int to = 500;
-
-        for (int i = 0; i <= 5; i++) {
-
-            ((JavascriptExecutor) getDriver()).executeScript("scroll(" + from + "," + to + ")");
-            Thread.sleep(1000);
-            from = from + 500;
-            to = to + 500;
-        }
+        Assert.assertTrue(wishlistPage.isProductListEmpty(), "Result page is not opened.");
     }
 
+    /**
+     * In this test I have a problem with hover, after type "cap" in search box
+     * (sometimes "Cap" is visible but sometimes not) and need to check with Mentor.
+     */
     @TestRailCases(testCasesId = "5")
     @Test(description = "Open the Adidas Home page and search product.")
     @MethodOwner(owner = "Saeid Vahidnia", platform = "web")
-    public void checkSearchBox() {
+    public void checkSearchSomeProduct() {
         AdidasHomePage adidasHomePage = new AdidasHomePage(getDriver());
         adidasHomePage.open();
         Assert.assertTrue(adidasHomePage.isPageOpened(), "Adidas home page is not opened.");
 
-        Assert.assertTrue(adidasHomePage.searchBoxIsPresent(), "Search box is not present.");
-        SearchBlock searchBlock = adidasHomePage.clickSearchBox("cap");
+        Assert.assertTrue(adidasHomePage.isSearchBoxPresent(), "Search box is not present.");
+        SearchBlock searchBlock = adidasHomePage.typeInSearchBox("cap");
 
-        Assert.assertTrue(searchBlock.newFrameIsVisible(), "Result page is not opened.");
-        ResultPage resultPage = searchBlock.clickOnCap();
+        Assert.assertTrue(searchBlock.isNewFrameVisible(), "Result page is not opened.");
+        ProductListResultPage searchResultPage = searchBlock.clickOnCapButton();
 
-        Assert.assertTrue(resultPage.popupIsVisible(), "Popup button is not visible.");
-        resultPage.closePopUp();
+        Assert.assertTrue(searchResultPage.isPopupVisible(), "Popup button is not visible.");
+        searchResultPage.clickOnClosePopUp();
 
-        Assert.assertFalse(resultPage.productListIsVisible(), "Result page is empty.");
+        Assert.assertFalse(searchResultPage.isProductListEmpty(), "Search result page is empty.");
     }
 
     @TestRailCases(testCasesId = "6")
-    @Test(description = "Using LowPrice to High filter.")
+    @Test(description = "Using LowPrice to HighPrice filter on AccessoriesPage.")
     @MethodOwner(owner = "Saeid Vahidnia", platform = "web")
-    public void verifyLowPriceToHigh() throws InterruptedException {
+    public void verifyLowPriceToHighPriceFilter() throws InterruptedException {
         Integer firstUnSort, firstSort;
         Integer secondUnSort, secondSort;
         Integer thirdUnSort, thirdSort;
@@ -162,19 +156,22 @@ public class AdidasTest extends AbstractTest {
         thirdUnSort = accessoriesPage.getProductPricesAsNumbers().get(5);
         fourthUnSort = accessoriesPage.getProductPricesAsNumbers().get(7);
 
-        Assert.assertTrue(accessoriesPage.isAnyElementPresent(accessoriesPage.getFilterButton()),
-                "Filter button is not visible.");
+        Assert.assertTrue(accessoriesPage.isFilterButtonVisible(), "Filter button is not visible.");
         FilterBlock filterBlock = accessoriesPage.clickFilterButton();
 
-        Assert.assertTrue(filterBlock.isLowPriceToHighButtonIsVisible(),
-                "LowPrice to High button filter not visible.");
-        filterBlock.clickLowPriceToHigh();
+        /**
+         * Go to method "isLowPriceToHighPriceButtonPresent" and answer the question.
+         */
+        Assert.assertTrue(filterBlock.isLowPriceToHighPriceButtonPresent(),
+                "LowPrice to HighPrice filter button is not visible.");
+        filterBlock.clickOnLowPriceToHighButton();
 
-        ResultPage resultPage = filterBlock.clickApplyButton();
+        Assert.assertTrue(filterBlock.isApplyButtonPresent(), "Apply button is not present.");
+        ProductListResultPage lowPriceToHighPricePage = filterBlock.clickOnApplyButton();
 
-        Assert.assertTrue(resultPage.popupIsVisible(), "Popup button is not visible.");
-        resultPage.closePopUp();
-        Assert.assertFalse(resultPage.popupIsVisible(), "Popup button is visible.");
+        Assert.assertTrue(lowPriceToHighPricePage.isPopupVisible(), "Popup button is not visible.");
+        lowPriceToHighPricePage.clickOnClosePopUp();
+        Assert.assertFalse(lowPriceToHighPricePage.isPopupVisible(), "Popup button is visible.");
 
         int from1 = 0;
         int to1 = 500;
@@ -187,23 +184,23 @@ public class AdidasTest extends AbstractTest {
             to1 = to1 + 500;
         }
 
-        firstSort = resultPage.getResultPricesAsNumbers().get(0);
+        firstSort = lowPriceToHighPricePage.getResultPricesAsNumbers().get(0);
         Assert.assertNotEquals(firstUnSort, firstSort, "Products are equals.");
 
-        secondSort = resultPage.getResultPricesAsNumbers().get(3);
+        secondSort = lowPriceToHighPricePage.getResultPricesAsNumbers().get(3);
         Assert.assertNotEquals(secondUnSort, secondSort, "Products are equals.");
 
-        thirdSort = resultPage.getResultPricesAsNumbers().get(5);
+        thirdSort = lowPriceToHighPricePage.getResultPricesAsNumbers().get(5);
         Assert.assertNotEquals(thirdUnSort, thirdSort, "Products are equals.");
 
-        fourthSort = resultPage.getResultPricesAsNumbers().get(7);
+        fourthSort = lowPriceToHighPricePage.getResultPricesAsNumbers().get(7);
         Assert.assertNotEquals(fourthUnSort, fourthSort, "Products are equals.");
     }
 
     @TestRailCases(testCasesId = "7")
-    @Test(description = "Using the HighPrice to Low filter.")
+    @Test(description = "Using the HighPrice to LowPrice filter on AccessoriesPage.")
     @MethodOwner(owner = "Saeid Vahidnia", platform = "web")
-    public void verifyHighPriceToLow() throws InterruptedException {
+    public void verifyHighPriceToLowPriceFilter() throws InterruptedException {
         Integer firstUnSort, firstSort;
         Integer secondUnSort, secondSort;
         Integer thirdUnSort, thirdSort;
@@ -229,18 +226,19 @@ public class AdidasTest extends AbstractTest {
         thirdUnSort = accessoriesPage.getProductPricesAsNumbers().get(5);
         fourthUnSort = accessoriesPage.getProductPricesAsNumbers().get(7);
 
-        Assert.assertTrue(accessoriesPage.isAnyElementPresent(accessoriesPage.getFilterButton())
-                , "Filter button isn't visible.");
+        Assert.assertTrue(accessoriesPage.isFilterButtonVisible(), "Filter button isn't visible.");
         FilterBlock filterBlock = accessoriesPage.clickFilterButton();
 
-        Assert.assertTrue(filterBlock.isHighPriceToLowButtonIsVisible(), "Filter button isn't visible.");
-        filterBlock.clickHighPriceToLow();
+        Assert.assertTrue(filterBlock.isHighPriceToLowPriceButtonPresent(),
+                "HighPrice to LowPrice filter button is not visible.");
+        filterBlock.clickOnHighPriceToLowButton();
 
-        ResultPage resultPage = filterBlock.clickApplyButton();
+        Assert.assertTrue(filterBlock.isApplyButtonPresent(), "Apply button is not present.");
+        ProductListResultPage highPriceToLowPricePage = filterBlock.clickOnApplyButton();
 
-        Assert.assertTrue(resultPage.popupIsVisible(), "Popup button is not visible.");
-        resultPage.closePopUp();
-        Assert.assertFalse(resultPage.popupIsVisible(), "Popup button is visible.");
+        Assert.assertTrue(highPriceToLowPricePage.isPopupVisible(), "Popup button is not visible.");
+        highPriceToLowPricePage.clickOnClosePopUp();
+        Assert.assertFalse(highPriceToLowPricePage.isPopupVisible(), "Popup button is visible.");
 
         int from1 = 0;
         int to1 = 500;
@@ -253,23 +251,23 @@ public class AdidasTest extends AbstractTest {
             to1 = to1 + 500;
         }
 
-        firstSort = resultPage.getResultPricesAsNumbers().get(0);
+        firstSort = highPriceToLowPricePage.getResultPricesAsNumbers().get(0);
         Assert.assertNotEquals(firstUnSort, firstSort, "Products are equals.");
 
-        secondSort = resultPage.getResultPricesAsNumbers().get(3);
+        secondSort = highPriceToLowPricePage.getResultPricesAsNumbers().get(3);
         Assert.assertNotEquals(secondUnSort, secondSort, "Products are equals.");
 
-        thirdSort = resultPage.getResultPricesAsNumbers().get(5);
+        thirdSort = highPriceToLowPricePage.getResultPricesAsNumbers().get(5);
         Assert.assertNotEquals(thirdUnSort, thirdSort, "Products are equals.");
 
-        fourthSort = resultPage.getResultPricesAsNumbers().get(7);
+        fourthSort = highPriceToLowPricePage.getResultPricesAsNumbers().get(7);
         Assert.assertNotEquals(fourthUnSort, fourthSort, "Products are equals.");
     }
 
     @TestRailCases(testCasesId = "8")
-    @Test(description = "Using the HighPrice to Low filter.")
+    @Test(description = "Using the TopSellers filter on AccessoriesPage.")
     @MethodOwner(owner = "Saeid Vahidnia", platform = "web")
-    public void verifyTopSellers() throws InterruptedException {
+    public void verifyTopSellersFilter() throws InterruptedException {
         Integer firstUnSort, firstSort;
         Integer secondUnSort, secondSort;
         Integer thirdUnSort, thirdSort;
@@ -292,21 +290,22 @@ public class AdidasTest extends AbstractTest {
 
         firstUnSort = accessoriesPage.getProductPricesAsNumbers().get(0);
         secondUnSort = accessoriesPage.getProductPricesAsNumbers().get(3);
-        thirdUnSort = accessoriesPage.getProductPricesAsNumbers().get(5);
+        thirdUnSort = accessoriesPage.getProductPricesAsNumbers().get(6);
         fourthUnSort = accessoriesPage.getProductPricesAsNumbers().get(7);
 
-        Assert.assertTrue(accessoriesPage.isAnyElementPresent(accessoriesPage.getFilterButton())
-                , "Filter button isn't visible.");
+        Assert.assertTrue(accessoriesPage.isFilterButtonVisible(), "Filter button isn't visible.");
         FilterBlock filterBlock = accessoriesPage.clickFilterButton();
 
-        Assert.assertTrue(filterBlock.isTopSellersButtonIsVisible(), "Filter button isn't visible.");
-        filterBlock.clickTopSellersButton();
+        Assert.assertTrue(filterBlock.isTopSellersButtonPresent(),
+                "TopSellers filter button is not visible.");
+        filterBlock.clickOnTopSellersButton();
 
-        ResultPage resultPage = filterBlock.clickApplyButton();
+        Assert.assertTrue(filterBlock.isApplyButtonPresent(), "Apply button is not present.");
+        ProductListResultPage topSellersPage = filterBlock.clickOnApplyButton();
 
-        Assert.assertTrue(resultPage.popupIsVisible(), "Popup button is not visible.");
-        resultPage.closePopUp();
-        Assert.assertFalse(resultPage.popupIsVisible(), "Popup button is visible.");
+        Assert.assertTrue(topSellersPage.isPopupVisible(), "Popup button is not visible.");
+        topSellersPage.clickOnClosePopUp();
+        Assert.assertFalse(topSellersPage.isPopupVisible(), "Popup button is visible.");
 
         int from1 = 0;
         int to1 = 500;
@@ -319,26 +318,41 @@ public class AdidasTest extends AbstractTest {
             to1 = to1 + 500;
         }
 
-        firstSort = resultPage.getResultPricesAsNumbers().get(0);
+        firstSort = topSellersPage.getResultPricesAsNumbers().get(0);
         Assert.assertNotEquals(firstUnSort, firstSort, "Products are equals.");
 
-        secondSort = resultPage.getResultPricesAsNumbers().get(3);
+        secondSort = topSellersPage.getResultPricesAsNumbers().get(3);
         Assert.assertNotEquals(secondUnSort, secondSort, "Products are equals.");
 
-        thirdSort = resultPage.getResultPricesAsNumbers().get(5);
+        thirdSort = topSellersPage.getResultPricesAsNumbers().get(6);
         Assert.assertNotEquals(thirdUnSort, thirdSort, "Products are equals.");
 
-        fourthSort = resultPage.getResultPricesAsNumbers().get(7);
+        fourthSort = topSellersPage.getResultPricesAsNumbers().get(7);
         Assert.assertNotEquals(fourthUnSort, fourthSort, "Products are equals.");
     }
 
+    /**
+     * Question about how to better use more than one index.
+     */
     @TestRailCases(testCasesId = "9")
     @Test(description = "Adding product to wishlist from Accessories page.")
     @MethodOwner(owner = "Saeid Vahidnia", platform = "web")
-    public void checkAddToWishlist() {
+    public void checkAddProductToWishlist() {
         AccessoriesPage accessoriesPage = new AccessoriesPage(getDriver());
         accessoriesPage.open();
+        Assert.assertTrue(accessoriesPage.isPageOpened(5), "Adidas home page is not opened.");
 
         accessoriesPage.addProductToWishlist();
+
+        Assert.assertTrue(accessoriesPage.isPopupVisible(), "Popup button is not visible.");
+        accessoriesPage.clickOnClosePopUp();
+        Assert.assertFalse(accessoriesPage.isPopupVisible(), "Popup button not visible.");
+
+        ProductListResultPage wishlistResult = accessoriesPage.clickOnWishListButton();
+        Assert.assertFalse(accessoriesPage.isWishlistListEmpty(), "Wishlist page is empty.");
+
+        Assert.assertTrue(wishlistResult.isPopupVisible(), "Popup button is not visible.");
+        wishlistResult.clickOnClosePopUp();
+        Assert.assertFalse(wishlistResult.isPopupVisible(), "Popup button not visible.");
     }
 }

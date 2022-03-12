@@ -2,7 +2,8 @@ package com.solvd.carina.page.components;
 
 import com.qaprosoft.carina.core.foundation.webdriver.decorator.ExtendedWebElement;
 import com.qaprosoft.carina.core.gui.AbstractUIObject;
-import com.solvd.carina.page.ResultPage;
+import com.solvd.carina.page.ProductListResultPage;
+import com.solvd.carina.page.SearchResultPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -15,16 +16,16 @@ public class SearchBlock extends AbstractUIObject {
         super(driver);
     }
 
-    public ResultPage clickOnCap() {
-        capButton.clickIfPresent();
-        return new ResultPage(driver);
+    public ProductListResultPage clickOnCapButton() {
+        capButton.clickIfPresent(10);
+        return new ProductListResultPage(driver);
     }
 
-    public ResultPage getProductResult() {
-        return new ResultPage(driver);
+    public SearchResultPage noResultForSearch() {
+        return new SearchResultPage(driver);
     }
 
-    public boolean newFrameIsVisible() {
-        return this.capButton.isPresent();
+    public boolean isNewFrameVisible() {
+        return capButton.isPresent();
     }
 }

@@ -18,11 +18,14 @@ public class AccessoriesPage extends AbstractPage {
     @FindBy(css = ".filter-panel-cta-btn___2zRtl")
     private ExtendedWebElement filterButton;
 
-    @FindBy(xpath = "(//div[@class='plp-product-card__wishlist-button___qAqKB toggle_wishlist_button___my-ER  '])[1]")
+    @FindBy(xpath = "//a[@class='wishlist_button_link___IAz6O outlined-icon-color___2xwB3 ']")
+    private ExtendedWebElement wishListButton;
+
+    @FindBy(xpath = "(//div[@class='plp-product-card__wishlist-button___qAqKB toggle_wishlist_button___my-ER  '])[%s]")
     private ExtendedWebElement addToWishlistButton;
 
     @FindBy(xpath = "//button[@class='gl-modal__close']")
-    private ExtendedWebElement closePopupButton;
+    private ExtendedWebElement popupButton;
 
     public AccessoriesPage(WebDriver driver) {
         super(driver);
@@ -30,33 +33,50 @@ public class AccessoriesPage extends AbstractPage {
     }
 
     public FilterBlock clickFilterButton() {
-        this.filterButton.clickIfPresent();
+        filterButton.clickIfPresent();
         return new FilterBlock(driver);
     }
 
-    public ExtendedWebElement getFilterButton() {
-        return this.filterButton;
+    public boolean isFilterButtonVisible() {
+        return filterButton.isPresent();
     }
 
     public List<String> getProductPricesAsStrings() {
-        return this.productPrices.stream()
+        return productPrices.stream()
                 .map(ExtendedWebElement::getText)
                 .collect(Collectors.toList());
     }
 
     public List<Integer> getProductPricesAsNumbers() {
-        return this.getProductPricesAsStrings().stream()
+        return getProductPricesAsStrings().stream()
                 .map(price -> price.replaceAll("[^0-9]", ""))
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
     }
 
-    public ResultPage addProductToWishlist() {
-        this.addToWishlistButton.clickIfPresent();
-        return new ResultPage(driver);
+    public ProductListResultPage clickOnWishListButton() {
+        wishListButton.clickIfPresent();
+        return new ProductListResultPage(driver);
     }
 
-    public void closePopup() {
-        this.closePopupButton.click();
+    /**
+     * How to add more than one index???
+     */
+    public void addProductToWishlist() {
+        addToWishlistButton.format(1).click();
+        addToWishlistButton.format(2).click();
+        addToWishlistButton.format(3).click();
+    }
+
+    public boolean isWishlistListEmpty() {
+        return productPrices.isEmpty();
+    }
+
+    public void clickOnClosePopUp() {
+        popupButton.clickIfPresent(5);
+    }
+
+    public boolean isPopupVisible() {
+        return popupButton.isVisible();
     }
 }
