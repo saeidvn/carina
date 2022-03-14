@@ -20,7 +20,7 @@ public class WishlistPage extends AbstractPage {
     }
 
     public void clickOnClosePopUp() {
-        this.popupButton.click();
+        popupButton.click();
     }
 
     public boolean isPopupVisible() {

@@ -2,6 +2,7 @@ package com.solvd.carina.page;
 
 import com.qaprosoft.carina.core.foundation.webdriver.decorator.ExtendedWebElement;
 import com.qaprosoft.carina.core.gui.AbstractPage;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -43,6 +44,19 @@ public class ProductListResultPage extends AbstractPage {
 
     public boolean isProductListEmpty() {
         return productPrices.isEmpty();
+    }
+
+    public void scrollDownPage() throws InterruptedException {
+        int from = 0;
+        int to = 500;
+
+        for (int i = 0; i <= 5; i++) {
+
+            ((JavascriptExecutor) getDriver()).executeScript("scroll(" + from + "," + to + ")");
+            Thread.sleep(1000);
+            from = from + 500;
+            to = to + 500;
+        }
     }
 
 }

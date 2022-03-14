@@ -9,10 +9,10 @@ import org.openqa.selenium.support.FindBy;
 public class FilterBlock extends AbstractUIObject {
 
     @FindBy(xpath = "//li[contains(@class,'sorting_option___3bTnn') and text()='Price (low - high)']")
-    private ExtendedWebElement lowPriceToHighButton;
+    private ExtendedWebElement lowPriceToHighPriceButton;
 
     @FindBy(xpath = "//li[contains(@class,'sorting_option___3bTnn') and text()='Price (high - low)']")
-    private ExtendedWebElement highPriceToLowButton;
+    private ExtendedWebElement highPriceToLowPriceButton;
 
     @FindBy(xpath = "//li[contains(@class,'sorting_option___3bTnn') and text()='Top Sellers']")
     private ExtendedWebElement topSellersButton;
@@ -25,11 +25,11 @@ public class FilterBlock extends AbstractUIObject {
     }
 
     public void clickOnLowPriceToHighButton() {
-        lowPriceToHighButton.clickIfPresent();
+        lowPriceToHighPriceButton.clickIfPresent();
     }
 
     public void clickOnHighPriceToLowButton() {
-        highPriceToLowButton.clickIfPresent();
+        highPriceToLowPriceButton.clickIfPresent();
     }
 
     public void clickOnTopSellersButton() {
@@ -42,14 +42,11 @@ public class FilterBlock extends AbstractUIObject {
     }
 
     public boolean isLowPriceToHighPriceButtonPresent() {
-        return lowPriceToHighButton.isPresent();
-        /** Need to ask which one is better!!!
-        return isAnyElementPresent(lowPriceToHighButton);
-         */
+        return lowPriceToHighPriceButton.isPresent();
     }
 
     public boolean isHighPriceToLowPriceButtonPresent() {
-        return highPriceToLowButton.isPresent();
+        return highPriceToLowPriceButton.isPresent();
     }
 
     public boolean isTopSellersButtonPresent() {

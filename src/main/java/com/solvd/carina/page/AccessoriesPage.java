@@ -4,6 +4,7 @@ import com.qaprosoft.carina.core.foundation.utils.R;
 import com.qaprosoft.carina.core.foundation.webdriver.decorator.ExtendedWebElement;
 import com.qaprosoft.carina.core.gui.AbstractPage;
 import com.solvd.carina.page.components.FilterBlock;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -37,7 +38,7 @@ public class AccessoriesPage extends AbstractPage {
         return new FilterBlock(driver);
     }
 
-    public boolean isFilterButtonVisible() {
+    public boolean isFilterButtonPresent() {
         return filterButton.isPresent();
     }
 
@@ -59,13 +60,10 @@ public class AccessoriesPage extends AbstractPage {
         return new ProductListResultPage(driver);
     }
 
-    /**
-     * How to add more than one index???
-     */
-    public void addProductToWishlist() {
-        addToWishlistButton.format(1).click();
-        addToWishlistButton.format(2).click();
-        addToWishlistButton.format(3).click();
+    public void addProductsToWishList(Integer [] numbersOfProducts) {
+        for (Integer indexOfProduct : numbersOfProducts) {
+            addToWishlistButton.format(indexOfProduct).click();
+        }
     }
 
     public boolean isWishlistListEmpty() {
@@ -78,5 +76,18 @@ public class AccessoriesPage extends AbstractPage {
 
     public boolean isPopupVisible() {
         return popupButton.isVisible();
+    }
+
+    public void scrollDownPage() throws InterruptedException {
+        int from = 0;
+        int to = 500;
+
+        for (int i = 0; i <= 5; i++) {
+
+            ((JavascriptExecutor) getDriver()).executeScript("scroll(" + from + "," + to + ")");
+            Thread.sleep(1000);
+            from = from + 500;
+            to = to + 500;
+        }
     }
 }

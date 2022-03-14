@@ -4,6 +4,7 @@ import com.qaprosoft.carina.core.foundation.utils.R;
 import com.qaprosoft.carina.core.foundation.webdriver.decorator.ExtendedWebElement;
 import com.qaprosoft.carina.core.gui.AbstractPage;
 import com.solvd.carina.page.components.SearchBlock;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -11,9 +12,6 @@ public class AdidasHomePage extends AbstractPage {
 
     @FindBy(xpath = "//a[@manual_cm_sp='header-_-customerinfo-_-Help']")
     private ExtendedWebElement headerHelpButton;
-
-    @FindBy(xpath = "//a[@manual_cm_sp='footer-_-help']")
-    private ExtendedWebElement footerHelpButton;
 
     @FindBy(xpath = "//a[@manual_cm_sp='footer-_-support-_-help & customer service']")
     private ExtendedWebElement helpAndCustomerServiceButton;
@@ -54,24 +52,13 @@ public class AdidasHomePage extends AbstractPage {
     }
 
     public HelpPage clickOnHeaderHelpButton() {
-        this.headerHelpButton.click();
+        headerHelpButton.click();
         return new HelpPage(driver);
     }
 
     public boolean isHeaderHelpButtonPresent() {
-        return this.headerHelpButton.isPresent();
+        return headerHelpButton.isPresent();
     }
-
-    /** They are used with 2nd help test(invisible help button on web)
-    public HelpPage footerHelpButton() {
-        this.footerHelpButton.click();
-        return new HelpPage(driver);
-    }
-
-    public boolean isFooterHelpButtonPresent() {
-        return this.footerHelpButton.isPresent();
-    }
-    */
 
     public HelpPage clickOnHelpAndCustomerServiceButton() {
         helpAndCustomerServiceButton.click();
@@ -86,12 +73,12 @@ public class AdidasHomePage extends AbstractPage {
         profileButton.clickIfPresent();
     }
 
-    public void TypeEmailInBox(String email) {
+    public void typeEmailInBox(String email) {
         emailBox.type(email);
     }
 
     public void clickOnContinueButton() {
-        continueButton.click();
+        continueButton.click(5);
     }
 
     public void typePasswordInBox(String password) {
@@ -107,10 +94,13 @@ public class AdidasHomePage extends AbstractPage {
         return new MyAccountPage(driver);
     }
 
-    public SearchBlock typeInSearchBox(String productName) {
+    public SearchBlock typeSpecialCharacter(String specialCharacter) {
+        searchBox.type(specialCharacter + Keys.ENTER);
+        return new SearchBlock(driver);
+    }
+
+    public SearchBlock searchProduct(String productName) {
         searchBox.click();
-        searchBox.hover();
-        pause(5);
         searchBox.type(productName);
         return new SearchBlock(driver);
     }
@@ -144,7 +134,7 @@ public class AdidasHomePage extends AbstractPage {
     }
 
     public void clickOnClosePopUp() {
-        this.popupButton.click();
+        popupButton.click();
     }
 
     public boolean isPopupVisible() {

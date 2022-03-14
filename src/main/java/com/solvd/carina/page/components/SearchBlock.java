@@ -2,8 +2,8 @@ package com.solvd.carina.page.components;
 
 import com.qaprosoft.carina.core.foundation.webdriver.decorator.ExtendedWebElement;
 import com.qaprosoft.carina.core.gui.AbstractUIObject;
-import com.solvd.carina.page.ProductListResultPage;
 import com.solvd.carina.page.SearchResultPage;
+import com.solvd.carina.page.ProductListResultPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
