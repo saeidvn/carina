@@ -10,8 +10,8 @@ import com.solvd.carina.page.components.SearchBlock;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class AdidasTest extends AbstractTest {
 
@@ -276,8 +276,11 @@ public class AdidasTest extends AbstractTest {
         accessoriesPage.open();
         Assert.assertTrue(accessoriesPage.isPageOpened(5), "Adidas home page is not opened.");
 
-        Integer[] productsIndexes = new Integer[] {1, 2, 3};
-        accessoriesPage.addProductsToWishList(productsIndexes);
+        List<Integer> indexOfProducts =
+                Arrays.asList(1, 2, 3);
+        for(int indexOfProduct :  indexOfProducts){
+            accessoriesPage.addProductToWishList(indexOfProduct);
+        }
 
         Assert.assertTrue(accessoriesPage.isPopupVisible(), "Popup button is not visible.");
         accessoriesPage.clickOnClosePopUp();
@@ -290,4 +293,4 @@ public class AdidasTest extends AbstractTest {
         wishlistResult.clickOnClosePopUp();
         Assert.assertFalse(wishlistResult.isPopupVisible(), "Popup button not visible.");
     }
-    }
+}

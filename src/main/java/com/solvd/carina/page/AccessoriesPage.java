@@ -60,10 +60,8 @@ public class AccessoriesPage extends AbstractPage {
         return new ProductListResultPage(driver);
     }
 
-    public void addProductsToWishList(Integer [] numbersOfProducts) {
-        for (Integer indexOfProduct : numbersOfProducts) {
-            addToWishlistButton.format(indexOfProduct).click();
-        }
+    public void addProductToWishList (int indexOfProduct) {
+        addToWishlistButton.format(indexOfProduct).click();
     }
 
     public boolean isWishlistListEmpty() {
