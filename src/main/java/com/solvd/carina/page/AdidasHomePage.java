@@ -70,7 +70,7 @@ public class AdidasHomePage extends AbstractPage {
     }
 
     public void clickOnProfileButton() {
-        profileButton.clickIfPresent();
+        profileButton.click();
     }
 
     public void typeEmailInBox(String email) {
@@ -78,7 +78,7 @@ public class AdidasHomePage extends AbstractPage {
     }
 
     public void clickOnContinueButton() {
-        continueButton.click(5);
+        continueButton.click();
     }
 
     public void typePasswordInBox(String password) {
@@ -142,7 +142,7 @@ public class AdidasHomePage extends AbstractPage {
     }
 
     public WishlistPage clickOnWishListButton() {
-        wishListButton.clickIfPresent();
+        wishListButton.click();
         return new WishlistPage(driver);
     }
 }

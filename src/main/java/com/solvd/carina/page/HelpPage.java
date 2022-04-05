@@ -22,7 +22,7 @@ public class HelpPage extends AbstractPage {
     }
 
     public AdidasHomePage clickOnAdidasHomePageButton() {
-        adidasHomePageButton.clickIfPresent();
+        adidasHomePageButton.click();
         return new AdidasHomePage(driver);
     }
 

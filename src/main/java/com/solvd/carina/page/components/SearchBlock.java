@@ -17,7 +17,7 @@ public class SearchBlock extends AbstractUIObject {
     }
 
     public ProductListResultPage clickOnCapButton() {
-        capButton.clickIfPresent(10);
+        capButton.clickIfPresent();
         return new ProductListResultPage(driver);
     }
 
@@ -26,6 +26,6 @@ public class SearchBlock extends AbstractUIObject {
     }
 
     public boolean isNewFrameVisible() {
-        return capButton.isPresent();
+        return capButton.isVisible();
     }
 }

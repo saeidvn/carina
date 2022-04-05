@@ -1,6 +1,6 @@
 package com.solvd.carina.page;
 
-import com.qaprosoft.carina.core.foundation.utils.R;
+import com.qaprosoft.carina.core.foundation.utils.Configuration;
 import com.qaprosoft.carina.core.foundation.webdriver.decorator.ExtendedWebElement;
 import com.qaprosoft.carina.core.gui.AbstractPage;
 import com.solvd.carina.page.components.FilterBlock;
@@ -8,8 +8,8 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class AccessoriesPage extends AbstractPage {
 
@@ -30,33 +30,30 @@ public class AccessoriesPage extends AbstractPage {
 
     public AccessoriesPage(WebDriver driver) {
         super(driver);
-        setPageAbsoluteURL(R.CONFIG.get("AccessoriesPage_url"));
+        setPageAbsoluteURL(Configuration.getEnvArg("url") + "y_3-accessories");
     }
 
     public FilterBlock clickFilterButton() {
-        filterButton.clickIfPresent();
+        filterButton.click();
         return new FilterBlock(driver);
+    }
+
+    public List<Integer> getResultPricesAsNumbers() {
+        List<Integer> productPrice = new ArrayList<>();
+        productPrices.stream()
+                .map(extendedWebElement -> extendedWebElement.getText()
+                        .replaceAll("[^0-9]", ""))
+                .map(Integer::parseInt)
+                .forEach(productPrice::add);
+        return productPrice;
     }
 
     public boolean isFilterButtonPresent() {
         return filterButton.isPresent();
     }
 
-    public List<String> getProductPricesAsStrings() {
-        return productPrices.stream()
-                .map(ExtendedWebElement::getText)
-                .collect(Collectors.toList());
-    }
-
-    public List<Integer> getProductPricesAsNumbers() {
-        return getProductPricesAsStrings().stream()
-                .map(price -> price.replaceAll("[^0-9]", ""))
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
-    }
-
     public ProductListResultPage clickOnWishListButton() {
-        wishListButton.clickIfPresent();
+        wishListButton.click();
         return new ProductListResultPage(driver);
     }
 
@@ -69,7 +66,7 @@ public class AccessoriesPage extends AbstractPage {
     }
 
     public void clickOnClosePopUp() {
-        popupButton.clickIfPresent(5);
+        popupButton.click();
     }
 
     public boolean isPopupVisible() {

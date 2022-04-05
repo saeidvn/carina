@@ -6,8 +6,8 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ProductListResultPage extends AbstractPage {
 
@@ -22,20 +22,17 @@ public class ProductListResultPage extends AbstractPage {
     }
 
     public void clickOnClosePopUp() {
-        popupButton.clickIfPresent(5);
-    }
-
-    public List<String> getResultPricesAsStrings() {
-        return productPrices.stream()
-                .map(ExtendedWebElement::getText)
-                .collect(Collectors.toList());
+        popupButton.click();
     }
 
     public List<Integer> getResultPricesAsNumbers() {
-        return getResultPricesAsStrings().stream()
-                .map(price -> price.replaceAll("[^0-9]", ""))
+        List<Integer> productPrice = new ArrayList<>();
+        productPrices.stream()
+                .map(extendedWebElement -> extendedWebElement.getText()
+                        .replaceAll("[^0-9]", ""))
                 .map(Integer::parseInt)
-                .collect(Collectors.toList());
+                .forEach(productPrice::add);
+        return productPrice;
     }
 
     public boolean isPopupVisible() {
